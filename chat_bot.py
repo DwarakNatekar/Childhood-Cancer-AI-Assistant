@@ -28,7 +28,9 @@ for message in st.session_state.chat_history:
         st.markdown(message["content"])
 
 # configuration
-vector_db_path = r"C:\AI Engineer\AI Projects\WHO Childhood Cancer Assistant\vector_db"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+vector_db_path = os.path.join(BASE_DIR, "vector_db")
+# vector_db_path = r"C:\AI Engineer\AI Projects\WHO Childhood Cancer Assistant\vector_db"
 collection_name  = "document_collection"
 
 # loading the embedding model - default model
