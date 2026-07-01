@@ -1,0 +1,20 @@
+# Secrets
+.env
+
+# Virtual environment
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Cursor / VS Code
+.vscode/
+.cursor/
+
+# OS files
+.DS_Store
+Thumbs.db

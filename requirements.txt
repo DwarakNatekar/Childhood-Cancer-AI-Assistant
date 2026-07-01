@@ -1,0 +1,12 @@
+langchain-community
+langchain-classic
+langchain-text-splitters
+langchain-huggingface
+chromadb
+langchain-chroma
+langchain-openai
+sentence-transformers
+unstructured
+unstructured[pdf]
+nltk
+streamlit
