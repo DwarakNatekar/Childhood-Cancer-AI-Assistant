@@ -3,14 +3,12 @@ import os
 
 from langchain_chroma import Chroma
 from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_openai import ChatOpenAI
-# langchain library has been restructured recently. Use langchain_classic for older imports as mentioned below.
+from langchain_groq import ChatGroq
 from langchain_classic.chains import RetrievalQA
-
 from dotenv import load_dotenv
 
 load_dotenv(override=True)
-# print(os.getenv("OPENAI_API_KEY"))
+
 
 st.set_page_config(
     page_title="Childhood Cancer AI Assistant",
@@ -30,16 +28,17 @@ for message in st.session_state.chat_history:
 # configuration
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 vector_db_path = os.path.join(BASE_DIR, "vector_db")
-# vector_db_path = r"C:\AI Engineer\AI Projects\WHO Childhood Cancer Assistant\vector_db"
 collection_name  = "document_collection"
 
 # loading the embedding model - default model
 embedding = HuggingFaceEmbeddings()
 
 # initialize openaillm
-llm = ChatOpenAI(
-    model="gpt-5-mini",
-    temperature=0.0
+llm = ChatGroq(
+    model="llama-3.3-70b-versatile",
+    temperature=0.0,
+    groq_api_key=os.getenv("GROQ_API_KEY"),
+    streaming=True
 )
 
 vector_store = Chroma(
@@ -70,21 +69,24 @@ if user_prompt:
         }
     )
 
-    response = qa_chain.invoke({"query":user_prompt})
+    response = qa_chain.invoke({"query": user_prompt})
 
     assistant_response = response["result"]
 
-    st.session_state.chat_history.append(
-        {
-            "role":"assistant",
-            "content":assistant_response
-        }
-    )
-
     with st.chat_message("assistant"):
-        st.markdown(assistant_response)
+        st.write_stream(word + " " for word in assistant_response.split())
+
         with st.expander("Sources Used"):
             for doc in response["source_documents"]:
-                st.write(doc.metadata)
+                file_name = os.path.basename(doc.metadata.get("source", "Unknown File"))
+                page = doc.metadata.get("page", "N/A")
+                st.write(f"📄 **{file_name}** | **Page:** {page + 1 if isinstance(page, int) else page}")
+
+    st.session_state.chat_history.append(
+        {
+            "role": "assistant",
+            "content": assistant_response
+        }
+    )
 
 

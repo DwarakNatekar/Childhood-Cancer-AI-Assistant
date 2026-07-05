@@ -4,7 +4,7 @@ langchain-text-splitters
 langchain-huggingface
 chromadb
 langchain-chroma
-langchain-openai
+langchain-groq
 sentence-transformers
 unstructured
 unstructured[pdf]
