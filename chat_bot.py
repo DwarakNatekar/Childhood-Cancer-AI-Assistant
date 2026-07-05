@@ -1,6 +1,6 @@
 import streamlit as st
 import os
-
+import ntpath
 from langchain_chroma import Chroma
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_groq import ChatGroq
@@ -78,7 +78,7 @@ if user_prompt:
 
         with st.expander("Sources Used"):
             for doc in response["source_documents"]:
-                file_name = os.path.basename(doc.metadata.get("source", "Unknown File"))
+                file_name = ntpath.basename(doc.metadata.get("source", "Unknown File"))
                 page = doc.metadata.get("page", "N/A")
                 st.write(f"📄 **{file_name}** | **Page:** {page + 1 if isinstance(page, int) else page}")
 
